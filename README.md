@@ -11,7 +11,9 @@ I tend to over-explain a lot of stuff, sometimes more than what's necessary, so 
 
 The AI ship appears to have sailed away, but I still have a boat to get onto and sail towards it. And honestly? It's a boat that I actually enjoy rowing.
 
-So here's my humble attempt at unlearning what I've learnt, and streamlining my thought process. It's like learning to row the boat (FDE is the boat, if it is not yet obvious).
+So here's my humble attempt at unlearning what I've learnt, and streamlining my thought process. It's like learning to row the boat (FDE is the boat, if it is not yet obvious).  
+
+I will also be adding to / editing older entries as I gain more clarity on performance optimisations, or just purely better language.
 
 So here goes nothing.
 
@@ -150,7 +152,7 @@ Can be applied in **two** ways - while **creating** the database, or while **alt
 
 **ON UPDATE CASCADE** - Parent update - Updating parent also updates child record.  
 **ON DELETE RESTRICT** - Parent delete - Restricts deleting parent record before deleting child parent.  
-<img src="assets/foreignKey.png" alt="diagram of a birds-eye-view of a DE pipeline" width="800">
+<img src="assets/foreignKey.png" alt="sample code for assigning foreign keys" width="800">
 
 **Unique constraint** - ensures that all values in a column are unique.  
 &emsp;ID int NOT NULL UNIQUE,
@@ -160,16 +162,21 @@ Can be applied in **two** ways - while **creating** the database, or while **alt
 
 **Check Constraint** - Permits operation only if values in a column satisfies a specific condition  
 &emsp;Age int CHECK(Age>=18)  
-<img src="assets/check&default.png" alt="diagram of a birds-eye-view of a DE pipeline" width="500">
+<img src="assets/check&default.png" alt="sample code for check and default constraints" width="500">
 
 **Default Constraints** - automatically insert a default value for a column, if no value is specified.  
 &emsp;City varchar (255) DEFAULT 'San Fransisco'
 
-**Composite Primary Key** - Combination of two or more columns as the primary key  
-**Star Schema** - One parent linked to multiple child tables  
-**Snowflake Scheme** - One parent connects to multiple child tables, and each child table also has grandchildren tables  
-**Delete** - Delete specific rows from a table while keeping the table structure intact.  
-**Truncate** - Delete the data in the table but retain the table.  
+### Composite Primary Key  
+Combination of two or more columns as the primary key  
+### Star Schema  
+One parent linked to multiple child tables  
+### Snowflake Scheme  
+One parent connects to multiple child tables, and each child table also has grandchildren tables  
+### Delete  
+Delete specific rows from a table while keeping the table structure intact.  
+### Truncate  
+Delete the data in the table but retain the table.  
 &emsp;TRUNCATE TABLE table_name;  
 **Drop** - Drops / deletes the entire table, its structure, schema, and all data permanently from the database.  also can frop the entire database.  
 &emsp;DROP TABLE IF EXISTS table_name;  
@@ -177,3 +184,81 @@ Can be applied in **two** ways - while **creating** the database, or while **alt
 
 **Creating a Database** - CREATE DATABASE database_name  
 **Selecting that database to create tables in** - USE database_name
+
+## 10/29/2026 - Day 03
+
+### SELECT statement   
+SELECT * FROM database_name.table.name; - Selects all data from the specified table in the specified database  
+SELECT DISTINCT - Selects distinct values only  
+<img src="assets/distinct.png" alt="sample code for select distinct" width="500">  
+Above code displays the total distinct film titles from Sakila db.  
+
+### WHERE condition  
+Filter out based on certain conditions.  
+It can be chained with multiple AND / OR conditions.  
+<img src="assets/whereChained.png" alt="sample code for chained where statement" width="500">  
+The above code displays all the film titles that have an R rating and are longer than or equalt to 92 minutes of runtime.  
+
+### LIMIT
+Limits the number of output rows / records  
+
+Ex: Finds the top 3 highest-paid employees  
+SELECT name, salary  
+FROM employees  
+ORDER BY salary DESC  
+LIMIT 3;  
+
+### ORDER BY  
+Order the returned records in ascending / descending order - sorts ascending if not specified.  
+
+ORDER BY title desc; -- descending order  
+
+### AND / OR Condition  
+Returns tables only when either of (OR) / or both (AND) the conditions are satisfied.  
+
+WHERE condition1 and condition2;  
+WHERE condition1 or condition2;  
+
+### NOT EQUAL TO !-
+
+WHERE condition != value;  
+WHERE NOT condition = value;  
+
+WHERE condition NOT IN (value1, value2, value3);  
+<img src="assets/notIn.png" alt="sample code for where with a not in condition" width="500">  
+
+### LIKE filtering  
+Used when searching for data with a specific pattern.  
+1. Percentile filtering  
+2. Underscore filtering  
+
+***Percentile filtering*** is used when the exact position is not known.  
+
+WHERE city LIKE '%a'; - returns all the rows that end with 'a'.  
+
+WHERE city LIKE '%ar%'; - returns all the rows that contain 'ar' - can be at the beginning, middle, or end with the pattern.  
+
+***Underscore filtering*** is used when the index position for the pattern is known.  
+
+WHERE city LIKE '_a___s%'; - returns all the rows that have the 2nd character as 'a' and the fifth as 's'.  
+<img src="assets/like.png" alt="sample code for like filtering" width="500">  
+
+### IS NULL  
+WHERE columnName IS NULL;  
+
+### Between  
+WHERE columnName BETWEEN 'value1' and 'value2';  
+
+### GROUP BY and HAVING  
+GROUP BY is used as an aggregation function - it *groups* the data together for analysis.  
+HAVING is then used as a condition inside that aggregation function.  
+<img src="assets/groupBy.png" alt="sample code for group by and having" width="500">  
+
+Difference between WHERE and HAVING, since both are filtering based on a condition, on a structural level, is that HAVING filters after aggregation is done, whereas WHERE is before any aggregation is performed, i.e., on the row level.
+
+### Order of execution  
+FROM -> JOIN -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER -> LIMIT  
+
+***Query execution plan -- Read***
+
+***Also read about the ALIAS Problem with SQL***
