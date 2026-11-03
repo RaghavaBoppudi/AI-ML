@@ -1,22 +1,5 @@
 # AI-ML
 
-So here's where it begins. Or at least I hope so. I am Raghava, and this is my version of a rough running notes for the training sessions I will be undergoing for a few weeks from now.
-
-"Why?" The question that always bugged me, and continues to do so. Why this training?
-
-I've been very interested in Data Engineering for the best part of the last three or so years, but something changed last week. I've been hearing the word "Forward Deployed Engineer" a little too many times lately and my curiosity made me dig deeper.
-What IS an FDE, who is it for, is it even FOR me?
-
-I tend to over-explain a lot of stuff, sometimes more than what's necessary, so I'll try to keep this notes to the minimum. I did not get in on the "AI Engineer" bandwagon two years ago, and I feel it's too late now. I always told myself that is too technical for me, I'm more of a people person. I love talking to people, trying to step into those shoes and understand their problem and then working on it. Little did I know that that was around the same ballpark as an FDE. And then it hit. What if I give myself another shot.
-
-The AI ship appears to have sailed away, but I still have a boat to get onto and sail towards it. And honestly? It's a boat that I actually enjoy rowing.
-
-So here's my humble attempt at unlearning what I've learnt, and streamlining my thought process. It's like learning to row the boat (FDE is the boat, if it is not yet obvious).  
-
-I will also be adding to / editing older entries as I gain more clarity on performance optimisations, or just purely better language.
-
-So here goes nothing.
-
 ## 10/22/2026 - Day 00
 
 The classes will run for about 7.5 weeks, or about a month and a half.
@@ -261,4 +244,32 @@ FROM -> JOIN -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER -> LIMIT
 
 ***Query execution plan -- Read***
 
-***Also read about the ALIAS Problem with SQL***
+***Also read about the ALIAS Problem with SQL***  
+
+## 10/30/2026 - Day 04
+
+### Cardinality Relationships  
+1. One-One relationship - One record of table 1 maps to exactly one record of table 2.  
+2. One-Many relationship - One record of table 1 maps to multiple records of table 2.  
+3. Many-One relationship - Many records of table 1 map to one record of Table 2.
+4. Many-Many relationship - Many records of table 1 map to multiple records of table 2.  
+
+**Bridge Table** - An intermediate table that is used to connect tables to themselves.  
+
+### Joins  
+In essence, connecting two tables in different ways for analysis.  
+<img src="assets/joins.png" alt="different types of joins" width="500">   
+
+1. **Left Join** - All the content of table A and the common content of table B.  
+2. **Right Join** - All the content of table B and the common content of table A.  
+3. **Full outer join** - All the content of table A and table B including the common ones.  
+4. **Inner join** - just the common elements of Table A and B.  
+5. **Left join excluding inner join** - All the elements of table A that are unique to it - no common elements from table B.  
+6. **Right join excluding inner join / RIGHT ANTI** - Like the above, but for table B.  
+7. **Full outer join excluding inner join / LEFT ANTI** - Just the unique elements from table A and table B, without the common ones.  
+8. **Cross join** - combinations of all the elements of table A and table B where each item in table A maps with each item in table B - Also called a **Cartesian Product**  
+9. **Self join** - Table joining with itself.  
+
+Refer to the joins.sql file for more info with examples. Below table is used in those examples.  
+
+<img src="assets/joins-table.png" alt="different types of joins" width="500">
