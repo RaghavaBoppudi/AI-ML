@@ -272,4 +272,82 @@ In essence, connecting two tables in different ways for analysis.
 
 Refer to the joins.sql file for more info with examples. Below table is used in those examples.  
 
-<img src="assets/joins-table.png" alt="different types of joins" width="500">
+<img src="assets/joins-table.png" alt="different types of joins" width="500">  
+
+## 11/02/2026 - Day 05
+
+### Sub-Query - this section will be refined later
+
+Essentially a Query within a query - can be used to combine two queries into one nested query.
+
+Sub-queries can be used in:  
+1. SELECT statement
+2. WHERE clause
+3. FROM claude - Derived tables  
+
+**Correlated Queries** - When an outer table is referenced inside a child table.
+
+When to use Join and when to use a Sub Query  
+
+Using Sub query as an Alias  
+
+Derived table scope of execution only at query level  
+Correlated sub-query  
+
+When using sub-query in select statement, it should be limited to 1 value 
+
+## 11/03/2026 - Day 06  
+
+### CTE - Common Table Expression  
+
+Think of it as declaring the content of a sub query beforehand and referencing it in the actual query.  
+
+Helps with readability and re-usability, but does not help with scope - still scoped at Query level.  
+
+WITH cte_name AS   
+(  
+&emsp;SELECT column1, column2  
+&emsp;FROM table_name  
+&emsp;WHERE condition  
+)  
+SELECT * FROM cte_name;  
+
+Always followed with a SELECT statement, filter, join, group, aggregate, etc.. to select the result of the CTE and perform stuff on it.  
+1. with starts the CTE definition and cte-name is the name assigned to the result.  
+2. cte_name is the name assigned to the result.  
+3. AS introduces the query that produces the result.  
+4. (select...) the actual query that produces the result - the query inside parantheses.  
+5. Outer SELECT uses the CTE as the source of data.  
+
+Ex: identify customers who have rented more than five films.  
+
+<img src="assets/non-cte-basic.png" alt="different types of joins" width="800">  
+
+The above returns it just fine, but what if you want to use this result in another query? You use a Sub-query...
+
+OR..  
+
+You can use a CTE
+
+<img src="assets/cte-basic.png" alt="different types of joins" width="500">  
+
+1. WITH tells MySQL that you are defining a CTE.  
+2. customer_rentals is the name you have given it.  
+3. AS introduces the query that generates its data.  
+4. The query inside the parentheses retrieves the rental count for each customer.  
+5. The outer SELECT reads the result using the name customer_rentals.  
+
+**CTE does not create a permanent table - it only exists inside the statement - SCOPE.** 
+
+### Recursive CTE  
+
+CTE that calls itself - used for running a CTE multiple times - think printing first n numbers in python (example, not to scale)  
+
+WITH RECURSIVE cte_name AS  
+(  
+    --anchor member - runs once - initiates the first number - the starting point of the recursion  
+    
+UNION ALL  
+
+--recursive member - runs repeatedly - references cte_name  
+)
