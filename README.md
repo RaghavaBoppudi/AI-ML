@@ -350,4 +350,162 @@ WITH RECURSIVE cte_name AS
 UNION ALL  
 
 --recursive member - runs repeatedly - references cte_name  
-)
+)  
+
+Refer to the separate sql scripts for CTEs for more info (not yet added - will be added shortly)  
+
+## 11/04/2026 - Day 07  
+
+### Temp Tables  
+
+Think of them as tables created to hold data temporarily while we work on them.  
+Like a scratchpad.  
+
+**Two ways to create temp tables**  
+1. SELECT statement.  
+2. Create structure first, insert data later  
+
+#### Temp-Tables using SELECT
+
+CREATE TEMPORARY TABLE temp_table_name AS
+
+SELECT ....  
+
+What you're essentially asking here is to create a temporary table with the name temp_table_name, and use the content following the select statement to populate it.  
+
+#### Creating Temp-table structure first - insert data later  
+
+CREATE TEMPORARY TABLE table_name (  
+&emsp;customer_id INT,  
+&emsp;first_name VARCHAR(50),  
+&emsp;last_name VARCHAR(50)  
+    )  
+
+This creates the structure for the temporary table, which can then be populated.  
+
+INSERT INTO table_name  
+
+SELECT ...  
+
+### Limitations of Temp-Tables  
+**Temp tables are persistent to session level**  i.e., other database sessions cannot access them.  
+
+Disappear when the session closes.  
+
+### When to use Temp tables  
+1. Complex data transformation - save immediate result and perform additional transformations.  
+2. Multiple calculations on the same result.  
+3. Data cleaning / ETL - use as a staging table to clean, transform and validate results before loading them in a permanent table  
+
+## 11/05/2026 - Day 08  
+
+### Views  
+Think of it like a saved SQL query that behaves like a virtual table.  
+
+It does not exist like a separate table, but only does so when the view is called.
+
+CREATE OR REPLACE VIEW view_table AS  
+
+SELECT ...  
+FROM ...  
+WHERE ...  
+
+The above creates a view and saves it as the SQL query, NOT a table - REMEMBER  
+
+**The table is executed ONLY when the view is called.**  
+
+SELECT * from view_table;  
+
+You can perform almost any action you want on the view table, treating it like an actual table.  
+
+It does not store any data, it executes the saved query everytime the view is called.  
+
+**Modifying an existing view definition**  
+ALTER VIEW view_table AS  
+
+The CREATE OR REPLACE VIEW can also be used to replace its definition after creating.  
+
+DROP VIEW view_table -- drop the view - DOES NOT delete the records - only deletes the saved query  
+
+**Read about the WITH CHECK option**  
+
+**Scope of View table** - larger  - not session specific - survives restarts, disconnects, etc.  
+
+#### Limitations  
+1. No independent data storage  
+2. Dependency - dropping / changing underlying tables can break views  
+
+#### When to use Views  
+1. Repeated reporting  
+2. Data abstraction - only expose certain columns instead of entire tables  
+
+
+### Stored Procedures  
+
+Named collection of SQL statements stored inside the database to be executed on call.  
+
+#### Delimiter  
+Use this at the starting and ending of a stored procedure to let SQL know whatever inside it should be treated as one SQL query.
+
+DELIMITER //  
+
+stored procedure query  
+
+DELIMITER ;  
+
+Why? - because a stored procedure has multiple SQL queries so MySQL doesn't know where to stop executing.
+
+#### Syntax  
+
+    DELIMITER //
+
+    CREATE PROCEDURE procedure_name()
+
+    BEGIN
+
+    SELECT *
+    FROM table_name;
+
+    END //
+
+    DELIMITER ;  
+Begin marks the beginning of the stored procedure.  
+End marks the end of the stored procedure.  
+
+
+#### Calling the stored procedure  
+CALL procedure_name();  
+
+#### Parameters in stored procedures  
+
+Essentially a value that can be used to prevent using hardcoded values in a stored procedure so the same stored procedure can be used for multiple values.  
+
+    DELIMITER //
+
+    CREATE PROCEDURE procedure_name(
+        IN sp_customer_id INT
+    )
+
+    BEGIN
+        SELECT *
+        FROM customer
+        WHERE customer_id = sp_customer_id;
+    END
+
+    DELIMITER ;
+Try to read that step by step.  
+1. We create a stored procedure called procedure name.  
+2. It accepts an INT value sp_customer_id.  
+3. IN means the procedure recieves a value from the calling function.  
+4. That value is then used inside the BEGIN query and is returned.  
+
+Now the function can be called with a value inside paranthesis like:  
+    CALL procedure_name(2);
+
+That executes this:  
+    SELECT * FROM customer WHERE customer_id = 2;
+
+#### Types of parameters
+1. IN - input parameter
+2. OUT - output parameter
+3. INOUT
