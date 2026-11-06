@@ -496,16 +496,118 @@ Essentially a value that can be used to prevent using hardcoded values in a stor
 Try to read that step by step.  
 1. We create a stored procedure called procedure name.  
 2. It accepts an INT value sp_customer_id.  
-3. IN means the procedure recieves a value from the calling function.  
+3. IN means the procedure recieves a value from the calling function -- INPUT parameter -- discussed below  
 4. That value is then used inside the BEGIN query and is returned.  
 
 Now the function can be called with a value inside paranthesis like:  
+
     CALL procedure_name(2);
 
 That executes this:  
+
     SELECT * FROM customer WHERE customer_id = 2;
 
 #### Types of parameters
 1. IN - input parameter
 2. OUT - output parameter
-3. INOUT
+3. INOUT - takes an output parameter and uses it as an input parameter (iterative)  
+
+**OUT parameter** - Allows the procedure to send a value BACK to the caller.  
+
+Declare a procedure with an OUT statement, and then place values INTO that value in the stored procedure.  
+
+    DELIMITER //
+
+    CREATE PROCEDURE procedure_name (
+        OUT output_param INT
+    )
+
+    BEGIN
+
+    SELECT COUNT(*)
+    INTO output_param
+    FROM customer;
+
+    END //
+
+    DELIMITER;
+
+The query above essentially declares an output parameter called "procedure_name" and then places the result of whatever is inside the begin statement into the output_param using
+
+    INTO output_param
+
+#### How do you call an output parameter  
+
+Create a **session variable**  
+
+    SET @total = 0;  
+
+Now call the procedure  
+
+    CALL procedure_name(@total);  
+
+Why does this alone not print a value? - because you are just calling a declared procedure and that procedure just stores data doesn't return anything.
+
+3. Return the value of the procedure  
+
+    SELECT @total;  
+
+**INOUT parameter** - Does both essentially  
+
+Recieves a value, modifies it and then returns it.  
+
+    DELIMITER //
+
+    CREATE PROCEDURE stored_procedure_name (
+        INOUT random_value INT
+    )
+
+    BEGIN
+
+    SET random_value = random_value * 2;
+
+    END //
+
+    DELIMITER
+
+The above code returns twice of whatever value you give it.  
+
+**Set a variable number**  
+
+    SET @number = 5;
+
+**Call it**
+
+    CALL stored_procedure_name(@number);
+
+**Return the value to view it**  
+
+    SELECT @number;  
+
+Returns 10.
+
+#### DECLARE
+
+Declare creates a local variable.  
+
+    DECLARE local_variable INT;
+
+#### SET
+Set creates a session variable.  
+
+    SET @total = 0;
+
+#### SELECT INTO
+Retrieves the value and stores it in a variable.  
+
+#### Show procedures in current database
+SHOW PROCEDURE STATUS
+WHERE Db = DATABASE();
+
+
+#### Limitations of Stored Procedures
+1. database dependency
+2. debugging convenience
+3. permissions - users need appropriate permissions to create or execute stored procedures  
+
+**They are NOT any faster than ordinary SQL queries. They're main advantage is reusable database logic
