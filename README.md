@@ -1,6 +1,4 @@
-# AI-ML
-
-## 10/22/2026 - Day 00
+# 10/22/2026 - Day 00
 
 The classes will run for about 7.5 weeks, or about a month and a half.
 
@@ -18,7 +16,7 @@ Detailed contents in the Google drive document.
 
 The classes will run Monday through Friday 11:00 am CST and run for about an hour or two(give or take 30 minutes on both) - No classes on weekends.
 
-### Assignments
+# Assignments
 1. Each session members be given some topics to prepare
 2. Member has to research, learn about the topics and try to solve questions before next session.
 3. In the next session, the topics will be discussed and related assignments will be given.
